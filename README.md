@@ -1,36 +1,72 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Aplicación de registro académico (prueba técnica) con Next.js 15, Prisma y MySQL.
 
-## Getting Started
+## Funcionalidades
 
-First, run the development server:
+- CRUD completo de estudiantes (crear, listar, editar, eliminar)
+- Selección obligatoria de exactamente 3 materias de un conjunto de 10
+- Validación de que cada materia pertenece a un profesor distinto (no repetir profesor)
+- Listado de estudiantes con materias y compañeros que comparten cada materia
+- Notificaciones de éxito y error con react-toastify
+- Interfaz con Tailwind y modo oscuro
+- Actualización y eliminación con retroalimentación inmediata (optimistic DOM update básica)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Reglas de negocio
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. 10 materias totales, cada una vale 3 créditos
+2. 5 profesores, cada uno dicta exactamente 2 materias
+3. Cada estudiante debe inscribir exactamente 3 materias
+4. No se permite repetir profesor en la selección
+5. Se muestran compañeros sólo por materia compartida
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tecnologías
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js 15 (App Router)
+- TypeScript estricto
+- Prisma ORM + MySQL
+- Tailwind CSS
+- React Toastify
 
-## Learn More
+## Estructura
 
-To learn more about Next.js, take a look at the following resources:
+- `prisma/schema.prisma`: Modelos de datos
+- `prisma/seed.ts`: Seed idempotente (profesores y materias)
+- `src/lib/prisma.ts`: Cliente Prisma singleton
+- `src/app/students`: Página principal de gestión
+- `src/app/students/api/route.ts`: Endpoint unificado para CRUD
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Puesta en marcha
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Copiar `.env.example` a `.env` y configurar `DATABASE_URL`.
+2. Crear la base de datos en MySQL (si no existe).
+3. Instalar dependencias: `npm install`.
+4. Ejecutar migración: `npx prisma migrate dev --name init`.
+5. Sembrar datos: `npm run prisma:seed`.
+6. Iniciar desarrollo: `npm run dev` y visitar `http://localhost:3000/students`.
 
-## Deploy on Vercel
+### Variables de entorno
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`DATABASE_URL` formato: `mysql://usuario:password@host:puerto/base`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Scripts útiles
+
+- `npm run prisma:migrate`: Migraciones en desarrollo
+- `npm run prisma:seed`: Seed de datos
+- `npm run prisma:studio`: UI de Prisma
+- `npm run prisma:generate`: Regenerar cliente
+- `npm run dev`: Entorno de desarrollo
+
+## Consideraciones
+
+- Validaciones críticas (exactamente 3 materias y profesores distintos) se realizan en el servidor.
+- Eliminación limpia con transacción (borra inscripciones antes del estudiante).
+- No se añadió autenticación (fuera del alcance actual).
+
+## Mejoras posibles
+
+- Refresco optimista completo para compañeros tras edición
+- Tests automatizados
+- Autenticación y roles
+- Internacionalización
+
+---
+Proyecto entregado como solución integral de la prueba técnica.
