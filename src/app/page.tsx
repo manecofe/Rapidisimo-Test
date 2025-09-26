@@ -23,8 +23,8 @@ export default function Home() {
           <Card title="Tecnologías" items={[
             'Next.js 15 (App Router)',
             'TypeScript',
-            'Prisma + MySQL',
-            'Tailwind CSS'
+            'Tailwind CSS',
+            'Backend .NET externo'
           ]} />
           <Card title="Acciones" items={[
             'Crear estudiante',

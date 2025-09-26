@@ -1,4 +1,4 @@
-Aplicación de registro académico (prueba técnica) con Next.js 15, Prisma y MySQL.
+Aplicación de registro académico (prueba técnica) - Frontend en Next.js 15 consumiendo un backend externo (.NET API).
 
 ## Funcionalidades
 
@@ -22,44 +22,36 @@ Aplicación de registro académico (prueba técnica) con Next.js 15, Prisma y My
 
 - Next.js 15 (App Router)
 - TypeScript estricto
-- Prisma ORM + MySQL
 - Tailwind CSS
 - React Toastify
+- Backend externo .NET (API REST en puerto 5053)
 
 ## Estructura
 
-- `prisma/schema.prisma`: Modelos de datos
-- `prisma/seed.ts`: Seed idempotente (profesores y materias)
-- `src/lib/prisma.ts`: Cliente Prisma singleton
-- `src/app/students`: Página principal de gestión
-- `src/app/students/api/route.ts`: Endpoint unificado para CRUD
+- `src/app/students`: Página principal de gestión y lógica de consumo de la API .NET
+- `src/app/page.tsx`: Página inicial / resumen
+- `src/app/ToastProvider.tsx`: Integración de notificaciones
 
-## Puesta en marcha
+## Puesta en marcha (Frontend)
 
-1. Copiar `.env.example` a `.env` y configurar `DATABASE_URL`.
-2. Crear la base de datos en MySQL (si no existe).
-3. Instalar dependencias: `npm install`.
-4. Ejecutar migración: `npx prisma migrate dev --name init`.
-5. Sembrar datos: `npm run prisma:seed`.
-6. Iniciar desarrollo: `npm run dev` y visitar `http://localhost:3000/students`.
+1. Asegurar que el backend .NET (puerto 5053) esté en ejecución y con CORS habilitado para este origen.
+2. Instalar dependencias: `npm install`.
+3. Ejecutar: `npm run dev` y visitar `http://localhost:3000/students`.
 
 ### Variables de entorno
 
-`DATABASE_URL` formato: `mysql://usuario:password@host:puerto/base`.
+Este frontend ya no requiere `DATABASE_URL`; toda la persistencia vive en el backend.
 
 ## Scripts útiles
 
-- `npm run prisma:migrate`: Migraciones en desarrollo
-- `npm run prisma:seed`: Seed de datos
-- `npm run prisma:studio`: UI de Prisma
-- `npm run prisma:generate`: Regenerar cliente
 - `npm run dev`: Entorno de desarrollo
+- `npm run build`: Build de producción
 
 ## Consideraciones
 
-- Validaciones críticas (exactamente 3 materias y profesores distintos) se realizan en el servidor.
-- Eliminación limpia con transacción (borra inscripciones antes del estudiante).
-- No se añadió autenticación (fuera del alcance actual).
+- Validaciones críticas (3 materias, profesores distintos, email único) se realizan ahora en el backend .NET.
+- El frontend aplica validación básica (limita selección a 3) antes de enviar.
+- Sin autenticación (fuera de alcance actual).
 
 ## Mejoras posibles
 
